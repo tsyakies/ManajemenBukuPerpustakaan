@@ -53,15 +53,14 @@ class BookController extends Controller
             'penulis' => 'required',
             'tahun_terbit' => 'required|numeric',
             'stok' => 'required|numeric',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048'        ]);
 
         $data = $request->except('gambar');
 
         if ($request->hasFile('gambar')) {
             $file     = $request->file('gambar');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/books', $filename);
+            $file->storeAs('books', $filename, 'public'); // ← ubah ini
             $data['gambar'] = $filename;
         }
 
@@ -85,19 +84,15 @@ class BookController extends Controller
             'penulis' => 'required',
             'tahun_terbit' => 'required|numeric',
             'stok' => 'required|numeric',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048'        ]);
 
         $data = $request->except('gambar');
 
         if ($request->hasFile('gambar')) {
-            // Hapus gambar lama jika ada
-            if ($book->gambar) {
-                \Storage::delete('public/books/' . $book->gambar);
-            }
+            
             $file     = $request->file('gambar');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/books', $filename);
+            $file->storeAs('books', $filename, 'public'); // ← ubah ini
             $data['gambar'] = $filename;
         }
 

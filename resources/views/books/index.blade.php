@@ -80,6 +80,7 @@
                     <th>Penulis</th>
                     <th>Tahun</th>
                     <th>Stok</th>
+                    <th>Gambar</th>
                     <th width="150">Aksi</th>
                 </tr>
             </thead>
@@ -92,6 +93,13 @@
                     <td>{{ $book->tahun_terbit }}</td>
                     <td>
                         <span class="badge bg-info">{{ $book->stok }}</span>
+                    </td>
+                    <td>
+                        @if($book->gambar)
+                            <img src="{{ asset('storage/books/' . $book->gambar) }}" style="height: 60px; border-radius: 4px;">
+                        @else
+                            <span class="text-muted">-</span>
+                        @endif
                     </td>
                     <td>
                         <a href="{{ route('books.edit',$book->id) }}" 
