@@ -47,15 +47,26 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
+        dd($request->all());
         $request->validate([
             'category_id' => 'required|numeric',
             'judul' => 'required',
             'penulis' => 'required',
             'tahun_terbit' => 'required|numeric',
-            'stok' => 'required|numeric'
+            'stok' => 'required|numeric',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
-        Book::create($request->all());
+        $data = $request->except('gambar');
+
+        if ($request->hasFile('gambar')) {
+            $file     = $request->file('gambar');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/books', $filename);
+            $data['gambar'] = $filename;
+        }
+
+         Book::create($data);
 
         return redirect()->route('books.index')
                 ->with('success','Data berhasil ditambahkan');
@@ -74,10 +85,24 @@ class BookController extends Controller
             'judul' => 'required',
             'penulis' => 'required',
             'tahun_terbit' => 'required|numeric',
-            'stok' => 'required|numeric'
+            'stok' => 'required|numeric',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
-        $book->update($request->all());
+        $data = $request->except('gambar');
+
+        if ($request->hasFile('gambar')) {
+            // Hapus gambar lama jika ada
+            if ($book->gambar) {
+                \Storage::delete('public/books/' . $book->gambar);
+            }
+            $file     = $request->file('gambar');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/books', $filename);
+            $data['gambar'] = $filename;
+        }
+
+         $book->update($data);
 
         return redirect()->route('books.index')
                 ->with('success','Data berhasil diupdate');

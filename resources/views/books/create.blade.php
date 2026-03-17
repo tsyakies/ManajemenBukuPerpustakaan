@@ -41,6 +41,12 @@
         <input type="number" name="stok" class="form-control">
     </div>
 
+    <div class="mb-3">
+        <label>Gambar</label>
+        <input type="file" name="gambar" class="form-control" accept="image/*">
+        <small class="text-muted">Format: JPG, JPEG, PNG, WEBP. Maks 2MB. (Opsional)</small>
+    </div>
+
     <button class="btn btn-success">Simpan</button>
     <a href="{{ route('books.index') }}" class="btn btn-secondary">Kembali</a>
 
